@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY field_service.py .
 COPY field_centroids.geojson .
 
-CMD ["python", "field_service.py"]
+CMD ["python", "-u", "field_service.py"]
