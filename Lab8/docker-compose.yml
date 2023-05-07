@@ -48,7 +48,7 @@ services:
 
   db:
     build:
-      context: .
+      context: db
       dockerfile: Dockerfile
     container_name: db
     ports:
@@ -66,7 +66,7 @@ services:
   service1:
     build: 
       context: service1
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
