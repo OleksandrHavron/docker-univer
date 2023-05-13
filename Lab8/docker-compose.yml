@@ -78,6 +78,31 @@ services:
         condition: service_healthy
       kafka: 
         condition: service_healthy
+      service2:
+        condition: service_started
     links:
       - db
       - kafka
+      - service2
+  
+  service2:
+    build: 
+      context: service2
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=db
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka: 
+        condition: service_healthy
+      # service1:
+      #   condition: service_started
+    links:
+      - db
+      - kafka
+      # - service1

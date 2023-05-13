@@ -5,7 +5,7 @@ from time import sleep
 import psycopg2
 from kafka import KafkaProducer
 
-# З'єднання з Kafka
+
 producer = KafkaProducer(bootstrap_servers='kafka:9092')
 POSTGIS_HOST = os.environ.get("POSTGRES_HOST")
 POSTGIS_PORT = os.environ.get("POSTGRES_PORT")
@@ -14,7 +14,7 @@ POSTGIS_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 POSTGIS_DB = os.environ.get("POSTGRES_DB")
 filename = 'field_centroids.geojson'
 
-# З'єднання з базою даних PostgreSQL
+
 def connect_to_db():
     conn = psycopg2.connect(
         host=POSTGIS_HOST,
@@ -25,7 +25,6 @@ def connect_to_db():
     )
     return conn
 
-# Запис даних про поля у базу даних та відправка повідомлення у Kafka
 def insert_field_to_db(field):
     conn = connect_to_db()
     cur = conn.cursor()
@@ -39,7 +38,6 @@ def insert_field_to_db(field):
         cur.close()
         conn.close()
 
-# # Зчитування даних з файлу field_centroids.geojson та запис у базу даних
 def read_fields_from_file():
     try:
         with open(filename, 'r') as f:
