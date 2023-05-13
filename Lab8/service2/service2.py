@@ -4,17 +4,20 @@ import psycopg2
 from kafka import KafkaConsumer, KafkaProducer
 
 
-consumer = KafkaConsumer(
-    'field-reading',
-    bootstrap_servers='kafka:9092',
-    group_id='field-reading-group'
-)
-producer = KafkaProducer(bootstrap_servers='kafka:9092')
 POSTGIS_HOST = os.environ.get("POSTGRES_HOST")
 POSTGIS_PORT = os.environ.get("POSTGRES_PORT")
 POSTGIS_USER = os.environ.get("POSTGRES_USER")
 POSTGIS_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 POSTGIS_DB = os.environ.get("POSTGRES_DB")
+KAFKA_HOST = os.environ.get("KAFKA_HOST")
+
+
+consumer = KafkaConsumer(
+    'field-reading',
+    bootstrap_servers=KAFKA_HOST,
+    group_id='field-reading-group'
+)
+producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)
 
 
 def connect_to_db():

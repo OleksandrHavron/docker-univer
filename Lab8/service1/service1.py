@@ -6,12 +6,14 @@ import psycopg2
 from kafka import KafkaProducer
 
 
-producer = KafkaProducer(bootstrap_servers='kafka:9092')
 POSTGIS_HOST = os.environ.get("POSTGRES_HOST")
 POSTGIS_PORT = os.environ.get("POSTGRES_PORT")
 POSTGIS_USER = os.environ.get("POSTGRES_USER")
 POSTGIS_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 POSTGIS_DB = os.environ.get("POSTGRES_DB")
+KAFKA_HOST = os.environ.get("KAFKA_HOST")
+
+producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)
 filename = 'field_centroids.geojson'
 
 

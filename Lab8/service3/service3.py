@@ -1,13 +1,16 @@
+import os
 import json
 import rasterio
 import ast
-
 from kafka import KafkaConsumer
+
+
+KAFKA_HOST = os.environ.get("KAFKA_HOST")
 
 
 consumer = KafkaConsumer(
     'field-processing',
-    bootstrap_servers='kafka:9092',
+    bootstrap_servers=KAFKA_HOST,
     group_id='field-processing-group'
 )
 
