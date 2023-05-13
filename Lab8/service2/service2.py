@@ -37,12 +37,12 @@ def read_message():
 def process_message(message):
     if message == "Data received":
         with open('POI.txt', 'r') as f:
-            poi = []
+            points = []
             for i in f:
                 points = i.strip().split(",")
                 nearest_point = get_nearest_point(points)
                 print(i.strip().split(","))
-                send_to_field_processing(nearest_point[2], nearest_point[2], points)
+                send_to_field_processing(nearest_point[3], nearest_point[2], points)
 
 
 def get_nearest_point(points):
@@ -60,7 +60,18 @@ def get_nearest_point(points):
     return nearest_point
 
 def send_to_field_processing(nearest_point_X, nearest_point_Y, poi):
-    producer.send('field-processing', f"Nearest point: [{nearest_point_X}, {nearest_point_Y}], POI: [{poi}]".encode("UTF-8"))
+    data =  {
+        'point_of_interest':{
+            'lat': poi[0],
+            'lon': poi[1]
+        },
+        'field_data': {
+            "name": "Pin17", 
+            'lat': nearest_point_Y,
+            'lon': nearest_point_X
+        }
+    }
+    producer.send('field-processing', str(data).encode("UTF-8"))
     print(f"Field data sent to Kafka.")
 
 

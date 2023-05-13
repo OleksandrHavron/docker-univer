@@ -100,9 +100,19 @@ services:
         condition: service_healthy
       kafka: 
         condition: service_healthy
-      # service1:
-      #   condition: service_started
+      service3:
+        condition: service_started
     links:
       - db
       - kafka
-      # - service1
+      - service3
+
+  service3:
+    build: 
+      context: service3
+      dockerfile: Dockerfile
+    depends_on:
+      kafka: 
+        condition: service_healthy
+    links:
+      - kafka
