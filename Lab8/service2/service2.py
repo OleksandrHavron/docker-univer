@@ -15,7 +15,8 @@ KAFKA_HOST = os.environ.get("KAFKA_HOST")
 consumer = KafkaConsumer(
     'field-reading',
     bootstrap_servers=KAFKA_HOST,
-    group_id='field-reading-group'
+    group_id='field-reading-group',
+    auto_offset_reset='earliest'
 )
 producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)
 
@@ -39,12 +40,13 @@ def read_message():
 
 def process_message(message):
     if message == "Data received":
-        with open('POI.txt', 'r') as f:
+        print("Message received")
+        with open('data/POI.txt', 'r') as f:
             points = []
             for i in f:
                 points = i.strip().split(",")
                 nearest_point = get_nearest_point(points)
-                print(i.strip().split(","))
+                print("Nearest point found: ", i.strip().split(","))
                 send_to_field_processing(nearest_point[3], nearest_point[2], points)
 
 
@@ -65,8 +67,8 @@ def get_nearest_point(points):
 def send_to_field_processing(nearest_point_X, nearest_point_Y, poi):
     data =  {
         'point_of_interest':{
-            'lat': poi[0],
-            'lon': poi[1]
+            'lat': float(poi[0]),
+            'lon': float(poi[1])
         },
         'field_data': {
             "name": "Pin17", 
@@ -75,12 +77,15 @@ def send_to_field_processing(nearest_point_X, nearest_point_Y, poi):
         }
     }
     producer.send('field-processing', str(data).encode("UTF-8"))
-    print(f"Field data sent to Kafka.")
+    print("Message sent:", str(data))
+    print(".............\n")
 
 
 if __name__ == "__main__":
-    print("Service started")
+    print("Service started!")
+    print("................")
     try:
         read_message()
     except KeyboardInterrupt:
+        print("...............")
         print("Service stopped")

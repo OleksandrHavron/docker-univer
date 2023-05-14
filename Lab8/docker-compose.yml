@@ -76,6 +76,10 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_HOST=db
       - KAFKA_HOST=kafka:9092
+    volumes:
+      - type: bind
+        source: service1/data
+        target: /app/data
     depends_on:
       db:
         condition: service_healthy
@@ -100,6 +104,10 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_HOST=db
       - KAFKA_HOST=kafka:9092
+    volumes:
+      - type: bind
+        source: service2/data
+        target: /app/data
     depends_on:
       db:
         condition: service_healthy
@@ -119,6 +127,10 @@ services:
     container_name: service3
     environment:
       - KAFKA_HOST=kafka:9092
+    volumes:
+      - type: bind
+        source: service3/output
+        target: /app/output
     depends_on:
       kafka: 
         condition: service_healthy

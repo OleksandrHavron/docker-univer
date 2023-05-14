@@ -32,3 +32,24 @@
 
 Як відповідь на лабораторну додайте посилання на репозиторій у відповідну колонку в Таблицю лабораторних робіт.
 Надалі усі лабораторні будуть виконуватись у цьому репозиторії в окремих каталогах.
+
+# How to run
+
+### 1. Create ***.env*** file in *Lab8*, *db* and *service1* folders
+```
+POSTGRES_USER=***
+POSTGRES_PASSWORD=***
+POSTGRES_DB=***
+```
+
+### 2. Check if there is *field_centroids.geojson* in *service1/data* folder
+### 3. Update *service2/POI.txt* with your points
+### 4. Run docker-compose
+``` bash
+docker-compose up -d
+```
+### 5. Fetch generated files from *service3/output* for points you provided
+### 6. Stop all containers
+``` bash
+docker-compose down -v
+```

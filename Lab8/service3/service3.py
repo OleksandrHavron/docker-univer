@@ -11,20 +11,24 @@ KAFKA_HOST = os.environ.get("KAFKA_HOST")
 consumer = KafkaConsumer(
     'field-processing',
     bootstrap_servers=KAFKA_HOST,
-    group_id='field-processing-group'
+    group_id='field-processing-group',
+    auto_offset_reset='earliest'
 )
 
 def read_message():
     for message in consumer:
         payload = message.value.decode('utf-8')
-        print(f"Message: {payload}")
+        print(f"Message received: \n{payload}")
         process_message(payload)
         consumer.commit()
 
 def process_message(message):
     data = ast.literal_eval(message)
     result = process_field_data(data)
-    save_to_json(result, f"result_{data['point_of_interest']['lat']}_{data['point_of_interest']['lon']}.json")
+    save_to_json(result, f"output/result_{data['point_of_interest']['lat']}_{data['point_of_interest']['lon']}.json")
+    print(f"File generated: output/result_{data['point_of_interest']['lat']}_{data['point_of_interest']['lon']}.json")
+    print("Message processed!")
+    print("..................")
 
 def process_field_data(field_data):
     moisture = get_soil_moisture(field_data['field_data']['lat'], field_data['field_data']['lon'])
@@ -53,6 +57,7 @@ def save_to_json(data, filename):
 
 def main():
     print("Service started!")
+    print("................")
     read_message()
     
 

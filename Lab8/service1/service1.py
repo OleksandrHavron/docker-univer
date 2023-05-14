@@ -14,7 +14,7 @@ POSTGIS_DB = os.environ.get("POSTGRES_DB")
 KAFKA_HOST = os.environ.get("KAFKA_HOST")
 
 producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)
-filename = 'field_centroids.geojson'
+filename = 'data/field_centroids.geojson'
 
 
 def connect_to_db():
@@ -53,9 +53,10 @@ def read_fields_from_file():
             insert_field_to_db(field)
         os.remove(filename)
         producer.send('field-reading', "Data received".encode("UTF-8"))
-        print(f"Field data sent to Kafka.")
+        print(f"Field data sent to Kafka.\n")
     except Exception as e:
         print(f"Error reading file: {str(e)}")
+        
 
 # Check and run read_fiealds_from_file() if file exists
 def check_new_file():
@@ -63,11 +64,13 @@ def check_new_file():
         if os.path.exists(filename):
             read_fields_from_file()
             print("Data saved into db.")
+            print("................\n")
         sleep(5)
 
 
 if __name__ == "__main__":
-    print("Service started")
+    print("Service started!")
+    print("................")
     try:
         check_new_file()
     except KeyboardInterrupt:
